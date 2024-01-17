@@ -8,7 +8,7 @@ image:
   repository: jvlr9510/api-autenticacao
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "dev6"
+  tag: "dev8"
 
 imagePullSecrets: []
 nameOverride: ""
