@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafkdrop
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafkdrop
+  template:
+    metadata:
+      labels:
+        app: kafkdrop
+    spec:
+      containers:
+      - name: kafkdrop
+        image: obsidiandynamics/kafdrop:latest
+        ports:
+        - containerPort: 9000
+        env:
+        - name: KAFKA_BROKERCONNECT
+          value: PLAINTEXT://kafka-service:9092
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafkdrop-service
+spec:
+  selector:
+    app: kafkdrop
+  ports:
+    protocol: http
+    port: 9000
+    targetPort: 9000
+  type: NodePort

@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-crud
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-crud
+  template:
+    metadata:
+      labels:
+        app: api-crud
+    spec:
+      containers:
+      - name: api-crud
+        image: jvlr9510/api_crud:dev
+        ports:
+        - containerPort: 8081
+        env:
+        - name: SPRING_FLYWAY_BASELINE_ON_MIGRATE
+          valueFrom:
+            configMapKeyRef:
+              name: api-crud-configmap
+              key: SPRING_FLYWAY_BASELINE_ON_MIGRATE
+        - name: SPRING_FLYWAY_TABLE
+          valueFrom:
+            configMapKeyRef:
+              name: api-crud-configmap
+              key: SPRING_FLYWAY_TABLE
+        - name: SPRING_DATASOURCE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: api-crud-configmap
+              key: SPRING_DATASOURCE_URL
+        - name: SPRING_DATASOURCE_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: api-crud-configmap
+              key: SPRING_DATASOURCE_USERNAME 
+        - name: SPRING_JPA_HIBERNATE_DDL
+          valueFrom:
+            configMapKeyRef:
+              name: api-crud-configmap
+              key: SPRING_JPA_HIBERNATE_DDL
+        - name: SPRING_JPA_PROPERTIES_HIBERNATE_JDBC_LOB_NON_CONTEXTUAL_CREATION
+          valueFrom:
+            configMapKeyRef:
+              name: api-crud-configmap
+              key: SPRING_JPA_PROPERTIES_HIBERNATE_JDBC_LOB_NON_CONTEXTUAL_CREATION 
+        - name: SERVER_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: api-crud-configmap
+              key: SERVER_PORT
+        - name: API_AUTENTICACAO_PATH
+          valueFrom:
+            configMapKeyRef:
+              name: api-crud-configmap
+              key: API_AUTENTICACAO_PATH
+        - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+          valueFrom:
+            configMapKeyRef:
+              name: api-crud-configmap
+              key: SPRING_KAFKA_BOOTSTRAP_SERVERS
+        - name: MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE
+          valueFrom:
+            configMapKeyRef:
+              name: api-crud-configmap
+              key: MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE
+        - name: MANAGEMENT_ENDPOINT_METRICS_ENABLED
+          valueFrom:
+            configMapKeyRef:
+              name: api-crud-configmap
+              key: MANAGEMENT_ENDPOINT_METRICS_ENABLED
+        - name: MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED
+          valueFrom:
+            configMapKeyRef:
+              name: api-crud-configmap
+              key: MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: api-autenticacao-secrets
+              key: SPRING_DATASOURCE_PASSWORD
+        - name: API_SECURITY_TOKEN_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: api-autenticacao-secrets
+              key: API_SECURITY_TOKEN_SECRET
