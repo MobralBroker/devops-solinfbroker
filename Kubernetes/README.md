@@ -1,4 +1,4 @@
-**Manual Rápido: Configurando o KIND e Acessando o Banco de Dados PostgreSQL no Kubernetes com DBeaver**
+**Manual Rápido: Configurando o KIND**
 
 Este é um guia rápido para configurar o KIND (Kubernetes in Docker) e acessar um banco de dados PostgreSQL no Kubernetes usando o DBeaver. Certifique-se de ter o Docker instalado na sua máquina antes de começar.
 
