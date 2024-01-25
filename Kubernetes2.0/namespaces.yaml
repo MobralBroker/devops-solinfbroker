@@ -1,0 +1,13 @@
+# namespace.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: solinf-broker
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev
+---
+
+
