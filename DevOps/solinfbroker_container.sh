@@ -121,7 +121,7 @@ services:
       SPRING_JPA_PROPERTIES_HIBERNATE_JDBC_LOB_NON_CONTEXTUAL_CREATION: true
       API_SECURITY_TOKEN_SECRET: teste
       SERVER_PORT: 8081
-      API_AUTENTICACAO_PATH: http://api-autenticacao:8080
+      PATH_API_AUTH: http://api-autenticacao:8080
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
     networks:
       - broker-kafka
@@ -136,7 +136,7 @@ services:
       - "3000:3000"
     environment:
       vue_app_auth_api_url: "http://api-autenticacao:8080"
-      vue_app_crud_api_url: "http://api-crud:8081"
+      vue_app_crud_api: "http://api-crud:8081"
     volumes:
       - /app/node_modules
       - $(pwd):/app
@@ -154,7 +154,7 @@ networks:
 EOF
 
 # Executa a simulação da Matrix enquanto inicializa os serviços
-print_red "CARREGANDO APLICAÇÕES!"
+print_red "Inicializando Solinfbroker Conternizado!"
 
 # Inicializa docker compose
 docker compose up -d
