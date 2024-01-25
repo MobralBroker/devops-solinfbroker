@@ -154,7 +154,7 @@ networks:
 EOF
 
 # Executa a simulação da Matrix enquanto inicializa os serviços
-(print_red "Inicializando serviços Kafka e banco de dados!"; simulate_matrix) &
+print_red "Inicializando Solinfbroker Conternizado!"
 
 # Inicializa docker compose
 docker compose up -d
