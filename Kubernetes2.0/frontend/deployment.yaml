@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend-broker-deployment
+  name: frontend-broker
   labels:
     app: frontend-broker
 spec:

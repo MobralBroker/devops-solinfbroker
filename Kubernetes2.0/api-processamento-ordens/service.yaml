@@ -6,3 +6,8 @@ metadata:
 spec:
   selector:
     app: api-processamento-ordens
+  ports:
+    - protocol: TCP
+      port: 8090
+      targetPort: 8090
+
