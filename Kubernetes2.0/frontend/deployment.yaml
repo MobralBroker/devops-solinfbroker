@@ -1,0 +1,34 @@
+#Deployment frontend
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-broker-deployment
+  labels:
+    app: frontend-broker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend-broker
+  template:
+    metadata:
+      labels:
+        app: frontend-broker
+    spec:
+      containers:
+      - name: frontend-broker
+        image: solinfbroker/frontend:prod
+        ports:
+        - containerPort: 80
+        env:
+        - name: vue_app_auth_api_url
+          valueFrom:
+            configMapKeyRef:
+              name: frontend-env
+              key: vue_app_auth_api_url
+        - name: vue_app_crud_api
+          valueFrom:
+            configMapKeyRef:
+              name: frontend-env
+              key: vue_app_crud_api
+
