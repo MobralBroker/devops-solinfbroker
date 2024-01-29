@@ -17,18 +17,19 @@ spec:
     spec:
       containers:
       - name: frontend-broker
-        image: solinfbroker/frontend:prod
+        image: solinfbroker/frontend-broker:prod
         ports:
         - containerPort: 80
+        imagePullPolicy: Always
         env:
-        - name: vue_app_auth_api_url
+        - name: VUE_APP_AUTH_API_URL
           valueFrom:
             configMapKeyRef:
-              name: frontend-env
-              key: vue_app_auth_api_url
-        - name: vue_app_crud_api
+              name: front-env
+              key: VUE_APP_AUTH_API_URL
+        - name: VUE_APP_CRUD_API_URL
           valueFrom:
             configMapKeyRef:
-              name: frontend-env
-              key: vue_app_crud_api
+              name: front-env
+              key: VUE_APP_CRUD_API_URL
 

@@ -1,4 +1,3 @@
-#Ingress Frontend
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -18,6 +17,24 @@ spec:
               number: 80
   - http:
       paths:
+      - path: /home
+        pathType: Prefix
+        backend:
+          service:
+            name: api-autenticacao-service
+            port:
+              number: 8080
+  - http:
+      paths:
+      - path: /carteira
+        pathType: Prefix
+        backend:
+          service:
+            name: api-autenticacao-service
+            port:
+              number: 8080  # Altere para a porta correta se necessário
+  - http:
+      paths:
       - path: /auth/login
         pathType: Prefix
         backend:
@@ -27,11 +44,12 @@ spec:
               number: 8080
   - http:
       paths:
-      - path: /auth/register   
+      - path: /auth/register
         pathType: Prefix
         backend:
           service:
             name: api-autenticacao-service
             port:
               number: 8080
+
 
