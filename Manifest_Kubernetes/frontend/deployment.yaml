@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: frontend-broker
-        image: solinfbroker/frontend-broker-nginx:latest
+        image: solinfbroker/frontend-nginx:latest 
         ports:
         - containerPort: 80
         imagePullPolicy: Always

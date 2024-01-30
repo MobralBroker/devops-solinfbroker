@@ -1,0 +1,54 @@
+# api-envio-dados-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-envio-dados-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-envio-dados
+  template:
+    metadata:
+      labels:
+        app: api-envio-dados
+    spec:
+      containers:
+      - name: api-envio-dados
+        image: solinfbroker/api-envio-dados:latest
+        ports:
+        - containerPort: 8086
+        env: 
+        - name: SERVER_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: envio-dados-env
+              key: SERVER_PORT
+        - name: PATH_API_AUTH
+          valueFrom:
+            configMapKeyRef:
+              name: crud-env
+              key:  PATH_API_AUTH
+        - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+          valueFrom:
+            configMapKeyRef:
+              name: spring-env
+              key: SPRING_KAFKA_BOOTSTRAP_SERVERS
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
