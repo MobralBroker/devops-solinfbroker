@@ -48,6 +48,7 @@ metadata:
 data:
   VUE_APP_AUTH_API_URL: "http://localhost:8081/auth/"
   VUE_APP_CRUD_API_URL: "http://localhost:8081/api/"
+  VUE_APP_CRUD_ENVIO_DADOS_URL: "http://localhost:8086/ws/"
 ---
 apiVersion: v1
 kind: ConfigMap
