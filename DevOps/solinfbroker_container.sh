@@ -5,7 +5,6 @@ print_red() {
     echo -e "\033[0;31m$1\033[0m"
 }
 
-# Simulação da Matrix com letras, números e palavras
 print_red "
     #####  #####  #      #  ##   #  #####  #####  #####  #####  #  #  #####  #####
     #      #   #  #      #  ##   #  #      #   #  #   #  #   #  # #   #      #   #
@@ -105,7 +104,7 @@ services:
       KAFKA_BROKERCONNECT: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
 
   api-autenticacao:
-    image: solinfbroker/api-autenticacao:dev
+    image: solinfbroker/api-autenticacao:latest
     ports:
       - "8080:8080"
     environment:
@@ -124,7 +123,7 @@ services:
       - postgresql
 
   api-crud:
-    image: solinfbroker/api-crud:dev
+    image: solinfbroker/api-crud:latest
     ports:
       - "8081:8081"
     environment:
@@ -137,7 +136,7 @@ services:
       SPRING_JPA_PROPERTIES_HIBERNATE_JDBC_LOB_NON_CONTEXTUAL_CREATION: true
       API_SECURITY_TOKEN_SECRET: teste
       SERVER_PORT: 8081
-      PATH_API_AUTH: http://api-autenticacao:8080
+      path_api_auth: http://api-autenticacao:8080
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
     networks:
       - broker-kafka
@@ -147,7 +146,7 @@ services:
       - postgresql
 
   api-processamento-ordens:
-    image: solinfbroker/api-processamento-ordens:dev
+    image: solinfbroker/api-processament-ordens:latest
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql:5432/database_master
       SPRING_DATASOURCE_USERNAME: root
@@ -166,13 +165,28 @@ services:
       - kafka
       - postgresql
 
+  api-envio-dados:
+    image: solinfbroker/api-envio-dados:latest
+    ports:
+      - 8086:8086
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      path_api_auth: http://api-autenticacao:8080
+    networks:
+      - broker-kafka
+    depends_on:
+      - api-autenticacao
+      - frontend
+      - kconnect
+
   frontend:
-    image: solinfbroker/frontend:dev
+    image: solinfbroker/frontend:latest
     ports:
       - "3000:3000"
     environment:
       vue_app_auth_api_url: "http://api-autenticacao:8080"
       vue_app_crud_api: "http://api-crud:8081"
+      vue_app_crud_envio_dados_url: "ws://api-envio-dados:8086"
     volumes:
       - /app/node_modules
       - $(pwd):/app
@@ -189,7 +203,6 @@ networks:
     driver: bridge
 EOF
 
-# Executa a simulação da Matrix enquanto inicializa os serviços
 print_red "Inicializando Solinfbroker Contenizado!"
 
 # Inicializa docker compose
