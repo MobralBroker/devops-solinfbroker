@@ -30,7 +30,7 @@ spec:
           pathType: Prefix
           backend:
             service:
-              name: api-crud-service
+              name: api-crud
               port:
                 number: 8081
     - http:
@@ -39,7 +39,7 @@ spec:
           pathType: Prefix
           backend:
             service:
-              name: api-autenticacao-service
+              name: api-autenticacao
               port:
                 number: 8080
 ---
