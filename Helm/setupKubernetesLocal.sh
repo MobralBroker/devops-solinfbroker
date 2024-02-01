@@ -8,7 +8,7 @@ display_info() {
 }
 
 # Criar cluster k3d
-k3d cluster create solinfbroker -p "8081:80@loadbalancer" --agents=3 --k3s-arg "--disable=traefik@server:0"
+k3d cluster create solinfbroker -p "8081:80@loadbalancer" -p "8086:8086@loadbalancer" --agents=3 --k3s-arg "--disable=traefik@server:0"
 display_info "Cluster 'solinfbroker' criado com sucesso."
 
 # Aplicar namespaces
