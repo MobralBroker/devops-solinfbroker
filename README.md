@@ -1,88 +1,33 @@
-# Dockerização da API de Autenticação e PostgreSQL
+# Manifestos Kubernetes - README
 
-Este repositório contém os arquivos necessários para dockerizar a API de Autenticação e o PostgreSQL. As imagens foram enviadas para o Docker Hub, permitindo uma fácil implantação e teste local utilizando Kubernetes.
+Este repositório utiliza manifestos Kubernetes para gerenciar recursos como Deployments, Services, Ingress, ConfigMaps e Secrets.
 
-## Docker Hub Repositórios:
-- [Imagem API de Autenticação](https://hub.docker.com/repository/docker/jvlr9510/api-autenticacao)
-- [Imagem PostgreSQL](https://hub.docker.com/repository/docker/jvlr9510/debeziumpostgres)
+## Tecnologias Adotadas
 
-## Como Usar com Kubernetes Locais
+### Deployment
 
-### Pré-requisitos
-- Certifique-se de ter o Kubernetes instalado. Consulte a documentação fornecida na pasta [Kubernetes](./Kubernetes) para obter instruções detalhadas.
+- **Descrição:** O Deployment é uma abstração no Kubernetes que gerencia a criação e a atualização de pods em um cluster.
+- **Uso:** Os manifestos do Deployment são usados para definir as características de implantação de um aplicativo ou microserviço.
 
-### Executando a Aplicação
-1. Clone este repositório:
+### Service
 
-   ```bash
-   git clone git@github.com:MobralBroker/SolinfBroker.git 
-   ```
+- **Descrição:** O Service permite a exposição de pods como serviços de rede dentro ou fora do cluster Kubernetes.
+- **Uso:** Os manifestos do Service são utilizados para criar serviços e especificar as regras de acesso aos pods.
 
-2. Acesse a pasta `Kubernetes`:
+### Ingress
 
-   ```bash
-   cd SolinfBroker/SolinfBrokerDevOps/Kubernetes/
-   ```
+- **Descrição:** O Ingress é um recurso Kubernetes que gerencia o acesso externo aos serviços dentro do cluster.
+- **Uso:** Os manifestos do Ingress são empregados para definir regras de roteamento e configurações de TLS para permitir o acesso externo aos serviços.
 
-3. Aplique as configurações para o namespace de desenvolvimento:
+### ConfigMap
 
-   ```bash
-   kubectl apply -f namespaces.yml
-   ```
+- **Descrição:** O ConfigMap é uma maneira de armazenar configurações não confidenciais em pares de chave-valor.
+- **Uso:** Os manifestos do ConfigMap são utilizados para injetar configurações ou variáveis de ambiente nos pods de um Deployment.
 
-4. Acesse as pastas `database_postgresql` e `autenticacao-api`, e execute:
+### Secret
 
-   ```bash
-   kubectl apply -f . -n dev
-   ```
+- **Descrição:** O Secret é utilizado para armazenar informações sensíveis, como senhas ou chaves de API, de forma segura no Kubernetes.
+- **Uso:** Os manifestos do Secret são empregados para gerenciar e injetar informações confidenciais nos pods, garantindo a segurança dos dados.
 
-5. Verifique se os pods estão em execução:
 
-   ```bash
-   kubectl get pods -n dev
-   ```
-
-## Expondo a API para Testes Externos com Ngrok
-
-[Ngrok](https://ngrok.com/) é uma ferramenta que cria túneis seguros para sua máquina local para a internet. Isso permite que você exponha localmente sua API para que outros desenvolvedores possam testar e validar.
-
-### Instalando Ngrok no Ubuntu
-1. Baixe o arquivo compactado do Ngrok:
-
-   ```bash
-   wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.tgz
-   ```
-
-2. Descompacte o arquivo:
-
-   ```bash
-   tar -xzvf ngrok-stable-linux-amd64.tgz
-   ```
-
-3. Mova o executável para um diretório no seu caminho (`$PATH`), por exemplo, `/usr/local/bin`:
-
-   ```bash
-   sudo mv ngrok /usr/local/bin
-   ```
-
-### Uso Básico do Ngrok
-1. Inicie sua aplicação localmente (por exemplo, a API de Autenticação):
-
-   ```bash
-   kubectl port-forward svc/api-autenticacao 8081:8081 -n dev
-   ```
-
-2. Em um novo terminal, execute o Ngrok:
-
-   ```bash
-   ngrok http 8081
-   ```
-
-3. O Ngrok gerará URLs públicas que você pode compartilhar para que outros possam acessar sua API localmente.
-
-## Documentação Adicional
-- [Documentação do Kubernetes](./Kubernetes/README.md)
-- [Documentação do Ngrok](https://ngrok.com/docs)
-- [Documentação API de Autenticação](https://github.com/jvlr9510/api-autenticacao)
-- [Documentação Imagem PostgreSQL](https://hub.docker.com/repository/docker/jvlr9510/debeziumpostgres)
 

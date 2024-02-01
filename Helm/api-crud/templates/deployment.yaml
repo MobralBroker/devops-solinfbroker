@@ -1,0 +1,124 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "api-crud.fullname" . }}
+  labels:
+    {{- include "api-crud.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "api-crud.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "api-crud.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "api-crud.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          env:
+          - name: SPRING_DATASOURCE_URL
+            valueFrom:
+              configMapKeyRef:
+                name: spring-env
+                key: SPRING_DATASOURCE_URL
+          - name: SPRING_DATASOURCE_USERNAME
+            valueFrom:
+              configMapKeyRef:
+                name: spring-env
+                key: SPRING_DATASOURCE_USERNAME
+          - name: SPRING_FLYWAY_BASELINEONMIGRATE
+            valueFrom:
+              configMapKeyRef:
+                name: spring-env
+                key: SPRING_FLYWAY_BASELINEONMIGRATE
+          - name: SPRING_JPA_HIBERNATE_DDL-AULA
+            valueFrom:
+              configMapKeyRef:
+                name: spring-env
+                key: SPRING_JPA_HIBERNATE_DDL-AULA
+          - name: SPRING_JPA_PROPERTIES_HIBERNATE_JDBC_LOB_NON_CONTEXTUAL_CREATION
+            valueFrom:
+              configMapKeyRef:
+                name: spring-env
+                key: SPRING_JPA_PROPERTIES_HIBERNATE_JDBC_LOB_NON_CONTEXTUAL_CREATION
+          - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+            valueFrom:
+              configMapKeyRef:
+                name: spring-env
+                key: SPRING_KAFKA_BOOTSTRAP_SERVERS
+          - name: SPRING_FLYWAY_TABLE
+            valueFrom:
+              configMapKeyRef:
+                name: crud-env
+                key: SPRING_FLYWAY_TABLE
+          - name: SERVER_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: crud-env
+                key: SERVER_PORT
+          - name: PATH_API_AUTH
+            valueFrom:
+              configMapKeyRef:
+                name: crud-env
+                key:  PATH_API_AUTH
+          - name: SPRING_DATASOURCE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: auth-secret
+                key: SPRING_DATASOURCE_PASSWORD
+          - name: API_SECURITY_TOKEN_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: auth-secret
+                key: API_SECURITY_TOKEN_SECRET
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- with .Values.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

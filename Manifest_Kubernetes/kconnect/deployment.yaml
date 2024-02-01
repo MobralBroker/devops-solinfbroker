@@ -1,0 +1,45 @@
+#Deployment kconnect
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kconnect-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kconnect
+  template:
+    metadata:
+      labels:
+        app: kconnect
+    spec:
+      containers:
+      - name: kconnect
+        image: debezium/connect:1.9
+        ports:
+        - containerPort: 8083
+          protocol: TCP
+        resources: {}
+        env:
+        - name: CONFIG_STORAGE_TOPIC
+          valueFrom:
+            configMapKeyRef:
+              name: kconnect-env
+              key: CONFIG_STORAGE_TOPIC
+        - name: OFFSET_STORAGE_TOPIC
+          valueFrom:
+            configMapKeyRef:
+              name: kconnect-env
+              key: OFFSET_STORAGE_TOPIC
+        - name: STATUS_STORAGE_TOPIC
+          valueFrom:
+            configMapKeyRef:
+              name: kconnect-env
+              key: STATUS_STORAGE_TOPIC
+        - name: BOOTSTRAP_SERVERS
+          valueFrom:
+            configMapKeyRef:
+              name: kconnect-env
+              key: BOOTSTRAP_SERVERS
+      dnsPolicy: ClusterFirst
+
